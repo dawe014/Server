@@ -1,13 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-var app = express();
 const { signString } = require("./utils/tools");
 const createOrder = require("./service/createOrderService");
 
+const app = express(); // ✅ Only declare once
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// allow cross-origin
-// Handle preflight requests
+
+// Handle preflight CORS requests
 app.options("*", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -21,6 +22,7 @@ app.options("*", (req, res) => {
   res.sendStatus(200);
 });
 
+// Apply CORS headers to all responses
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -39,8 +41,8 @@ app.post("/create/order", function (req, res) {
   createOrder.createOrder(req, res);
 });
 
-// start server
-let serverPort = 8081;
-var app = app.listen(serverPort, function () {
+// Start the server
+const serverPort = 8081;
+app.listen(serverPort, function () {
   console.log("server started, port:" + serverPort);
 });
