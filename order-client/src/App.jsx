@@ -6,7 +6,7 @@ function App() {
   const [amount, setAmount] = useState("");
   const [responseURL, setResponseURL] = useState("");
 
-  const baseUrl = "https://telebirr-test-gx48.onrender.com"; // You might want to make this dynamic for production
+  const baseUrl = "https://telebirr-test-wnp8.onrender.com"; // You might want to make this dynamic for production
 
   const handleSubmit = async (e) => {
     e.preventDefault();
