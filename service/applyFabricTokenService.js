@@ -1,26 +1,34 @@
-const https = require("http");
+const request = require("request");
 const config = require("../config/config");
-var request = require("request");
 
 function applyFabricToken() {
   return new Promise((resolve, reject) => {
-    var options = {
+    const options = {
       method: "POST",
       url: config.baseUrl + "/payment/v1/token",
       headers: {
         "Content-Type": "application/json",
         "X-APP-Key": config.fabricAppId,
       },
-      rejectUnauthorized: false, //add when working with https sites
-      requestCert: false, //add when working with https sites
-      agent: false, //add when working with https sites
+      rejectUnauthorized: false,
+      requestCert: false,
+      agent: false,
       body: JSON.stringify({
         appSecret: config.appSecret,
       }),
     };
-    request(options, function (error, response) {
-      let result = JSON.parse(response.body);
-      resolve(result);
+
+    request(options, function (error, response, body) {
+      if (error) {
+        return reject(new Error(`Request failed: ${error.message}`));
+      }
+
+      try {
+        const result = JSON.parse(body);
+        resolve(result);
+      } catch (parseError) {
+        reject(new Error(`Failed to parse response: ${parseError.message}`));
+      }
     });
   });
 }
